@@ -1,4 +1,5 @@
 using UnityEngine;
+using Assets.Scripts.Utils;
 
 public class Enemy : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class Enemy : MonoBehaviour
 
         if (transform.position.y <= -3.8f)
         {
-            transform.position = getRandomVector3();
+            transform.position = Utils.getRandomVector3();
             GameObject playerGameObj = GameObject.FindWithTag("Player");
             if (playerGameObj != null)
             {
@@ -45,11 +46,5 @@ public class Enemy : MonoBehaviour
             }
             Destroy(gameObject);
         }
-    }
-
-    private Vector3 getRandomVector3()
-    {
-        var rand = Random.Range(-9f, 9f);
-        return new Vector3(rand, 6, 0);
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
@@ -7,6 +8,9 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private GameObject _laserPrefab;
+
+    [SerializeField]
+    private GameObject _tripleShotPrefab;
 
     [SerializeField]
     private float _fireRate = 0.15f;
@@ -19,6 +23,12 @@ public class Player : MonoBehaviour
     
     [SerializeField]
     private SpawnManager _spawnManager;
+
+    [SerializeField]
+    private bool _isTrippleShotActive = false;
+
+    [SerializeField]
+    private float _trippleShotTime = 5.0f;
 
     void Start()
     {
@@ -34,6 +44,18 @@ public class Player : MonoBehaviour
         {
             fireLazer();
         }
+    }
+
+    public void activateTrippleShot()
+    {
+        _isTrippleShotActive = true;
+        StartCoroutine(TrippleShotPowerDownRoutine());
+    }
+
+    IEnumerator TrippleShotPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(_trippleShotTime);
+        _isTrippleShotActive = false;
     }
 
     public void Damage()
@@ -58,7 +80,14 @@ public class Player : MonoBehaviour
     private void fireLazer()
     {
         _canFire = Time.time + _fireRate;
-        Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.0f, 0), Quaternion.identity);
+        if (_isTrippleShotActive)
+        {
+            Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 1.0f, 0), Quaternion.identity);
+        }
+        else
+        {
+            Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.0f, 0), Quaternion.identity);
+        }
     }
 
     private void calculateMovement()
