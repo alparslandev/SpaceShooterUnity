@@ -13,6 +13,9 @@ public class Player : MonoBehaviour
     private GameObject _tripleShotPrefab;
 
     [SerializeField]
+    private GameObject _Shields;
+
+    [SerializeField]
     private float _fireRate = 0.15f;
 
     [SerializeField]
@@ -20,15 +23,18 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private int _lifePoints = 10;
-    
+
     [SerializeField]
     private SpawnManager _spawnManager;
 
     [SerializeField]
-    private bool _isTrippleShotActive = false;
+    private float _speedMultiplier = 2;
 
     [SerializeField]
     private float _trippleShotTime = 5.0f;
+
+    private bool _isTripleShotActive = false;
+    private bool _isImmortal = false;
 
     void Start()
     {
@@ -48,18 +54,20 @@ public class Player : MonoBehaviour
 
     public void activateTrippleShot()
     {
-        _isTrippleShotActive = true;
+        _isTripleShotActive = true;
         StartCoroutine(TrippleShotPowerDownRoutine());
     }
 
     IEnumerator TrippleShotPowerDownRoutine()
     {
         yield return new WaitForSeconds(_trippleShotTime);
-        _isTrippleShotActive = false;
+        _isTripleShotActive = false;
     }
 
     public void Damage()
     {
+        if (_isImmortal) return;
+
         _lifePoints--;
 
         if (this.gameObject.activeInHierarchy && _lifePoints < 1)
@@ -80,7 +88,7 @@ public class Player : MonoBehaviour
     private void fireLazer()
     {
         _canFire = Time.time + _fireRate;
-        if (_isTrippleShotActive)
+        if (_isTripleShotActive)
         {
             Instantiate(_tripleShotPrefab, transform.position + new Vector3(0, 1.0f, 0), Quaternion.identity);
         }
@@ -88,6 +96,32 @@ public class Player : MonoBehaviour
         {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.0f, 0), Quaternion.identity);
         }
+    }
+
+    public void activateSpeedMultiplier()
+    {
+        _speed *= _speedMultiplier;
+        StartCoroutine(SpawnSpeedUpRoutine());
+    }
+
+    IEnumerator SpawnSpeedUpRoutine()
+    {
+        yield return new WaitForSeconds(5);
+        _speed /= _speedMultiplier;
+    }
+
+    public void activateShield()
+    {
+        _isImmortal = true;
+        _Shields.SetActive(true);
+        StartCoroutine(SpawnShieldRoutine());
+    }
+
+    IEnumerator SpawnShieldRoutine()
+    {
+        yield return new WaitForSeconds(5);
+        _Shields.SetActive(false);
+        _isImmortal = false;
     }
 
     private void calculateMovement()
