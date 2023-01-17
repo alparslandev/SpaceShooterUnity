@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
     private float _canFire = -1f;
 
     [SerializeField]
-    private int _lifePoints = 10;
+    private int _lifePoints = 7;
 
     [SerializeField]
     private SpawnManager _spawnManager;
@@ -81,6 +81,7 @@ public class Player : MonoBehaviour
         if (_isImmortal) return;
 
         _lifePoints--;
+        _uiManager.UpdateLives(_lifePoints);
 
         if (this.gameObject.activeInHierarchy && _lifePoints < 1)
         {
