@@ -6,18 +6,21 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _speed = 4.0f;
 
+    private Player _player;
+
+    private void Start()
+    {
+        _player = GameObject.FindWithTag("Player").GetComponent<Player>();
+    }
+
     void Update()
     {
-        // move down at 4 meters per second
-        // if bottom of screen respawn at top with a new random x position
-
         if (transform.position.y <= -3.8f)
         {
             transform.position = Utils.getRandomVector3();
-            GameObject playerGameObj = GameObject.FindWithTag("Player");
-            if (playerGameObj != null)
+            if (_player != null)
             {
-                Player playerObj = playerGameObj.GetComponent<Player>();
+                Player playerObj = _player.GetComponent<Player>();
                 if (!playerObj.isDead())
                     playerObj.Damage();
             } 
@@ -34,15 +37,19 @@ public class Enemy : MonoBehaviour
     {
         if (other.tag == "Laser")
         {
+            if (_player != null)
+            {
+                _player.IncreaseScore(10);
+            }
+            
             Destroy(other.gameObject);
             Destroy(gameObject);
         }
         else if (other.tag == "Player")
         {
-            var player = other.GetComponent<Player>();
-            if (player != null)
+            if (_player != null)
             {
-                player.Damage();
+                _player.Damage();
             }
             Destroy(gameObject);
         }

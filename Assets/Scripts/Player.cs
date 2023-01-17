@@ -33,13 +33,19 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _trippleShotTime = 5.0f;
 
+    [SerializeField]
+    private int _score = 0;
+
+    private UIManager _uiManager;
+
     private bool _isTripleShotActive = false;
     private bool _isImmortal = false;
 
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
-
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 
     void Update()
@@ -50,6 +56,12 @@ public class Player : MonoBehaviour
         {
             fireLazer();
         }
+    }
+
+    public void IncreaseScore(int points = 10)
+    {
+        _score += points;
+        _uiManager.UpdateScore(_score);
     }
 
     public void activateTrippleShot()
