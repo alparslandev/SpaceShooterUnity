@@ -34,7 +34,7 @@ public class UIManager : MonoBehaviour
         {
             StopCoroutine(GameOverFlickerRoutine());
             Start();
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(1);
         }
     }
 
