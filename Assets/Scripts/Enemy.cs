@@ -6,10 +6,14 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _speed = 4.0f;
 
+    [SerializeField]
+    private Animator _animator;
+
     private Player _player;
 
     private void Start()
     {
+        _animator = GetComponent<Animator>();
         _player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
 
@@ -41,17 +45,21 @@ public class Enemy : MonoBehaviour
             {
                 _player.IncreaseScore(10);
             }
-            
+
+            _animator.SetTrigger("OnEnemyDeath");
+            _speed = 0;
             Destroy(other.gameObject);
-            Destroy(gameObject);
+            Destroy(gameObject, 2.8f);
         }
-        else if (other.tag == "Player")
+        if (other.tag == "Player")
         {
             if (_player != null)
             {
                 _player.Damage();
             }
-            Destroy(gameObject);
+            _animator.SetTrigger("OnEnemyDeath");
+            _speed = 0;
+            Destroy(gameObject, 2.8f);
         }
     }
 }
