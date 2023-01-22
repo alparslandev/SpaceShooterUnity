@@ -16,6 +16,12 @@ public class Player : MonoBehaviour
     private GameObject _Shields;
 
     [SerializeField]
+    private GameObject _LeftEngine;
+
+    [SerializeField]
+    private GameObject _RightEngine;
+
+    [SerializeField]
     private float _fireRate = 0.15f;
 
     [SerializeField]
@@ -82,6 +88,16 @@ public class Player : MonoBehaviour
 
         _lifePoints--;
         _uiManager.UpdateLives(_lifePoints);
+
+        if (_lifePoints == 2)
+        {
+            if (Random.Range(1, 3) == 1) _LeftEngine.SetActive(true);
+            else _RightEngine.SetActive(true);
+        } else if (_lifePoints == 1)
+        {
+            if (_LeftEngine.activeInHierarchy) _RightEngine.SetActive(true);
+            else _LeftEngine.SetActive(true);
+        }
 
         if (this.gameObject.activeInHierarchy && _lifePoints < 1)
         {
