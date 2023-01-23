@@ -42,6 +42,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _score = 0;
 
+    private AudioSource _fireLaserSound;
+
     private UIManager _uiManager;
 
     private bool _isTripleShotActive = false;
@@ -52,6 +54,7 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _fireLaserSound = gameObject.GetComponent<AudioSource>();
     }
 
     void Update()
@@ -126,6 +129,8 @@ public class Player : MonoBehaviour
         {
             Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.0f, 0), Quaternion.identity);
         }
+
+        _fireLaserSound.Play();
     }
 
     public void activateSpeedMultiplier()

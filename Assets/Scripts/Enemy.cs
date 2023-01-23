@@ -11,8 +11,11 @@ public class Enemy : MonoBehaviour
 
     private Player _player;
 
+    private AudioSource _explosionSound;
+
     private void Start()
     {
+        _explosionSound = gameObject.GetComponent<AudioSource>();
         _animator = GetComponent<Animator>();
         _player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
@@ -49,6 +52,7 @@ public class Enemy : MonoBehaviour
             _animator.SetTrigger("OnEnemyDeath");
             _speed = 0;
             Destroy(other.gameObject);
+            _explosionSound.Play();
             Destroy(gameObject, 2.8f);
         }
         if (other.tag == "Player")
@@ -59,6 +63,7 @@ public class Enemy : MonoBehaviour
             }
             _animator.SetTrigger("OnEnemyDeath");
             _speed = 0;
+            _explosionSound.Play();
             Destroy(gameObject, 2.8f);
         }
     }
