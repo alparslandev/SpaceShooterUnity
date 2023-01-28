@@ -4,7 +4,7 @@ using Assets.Scripts.Utils;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private float _speed = 4.0f;
+    private float _speed = 3.0f;
 
     [SerializeField]
     private Animator _animator;
