@@ -1,5 +1,6 @@
 using UnityEngine;
 using Assets.Scripts.Utils;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
@@ -49,22 +50,31 @@ public class Enemy : MonoBehaviour
                 _player.IncreaseScore(10);
             }
 
-            _animator.SetTrigger("OnEnemyDeath");
             _speed = 0;
+            Destroy(gameObject, 2.8f);
+            GetComponent<BoxCollider2D>().enabled = false;
+            StartCoroutine(EnableBox(2.8f));
+            _animator.SetTrigger("OnEnemyDeath");
             Destroy(other.gameObject);
             _explosionSound.Play();
-            Destroy(gameObject, 2.8f);
         }
-        if (other.tag == "Player")
+        else if (other.tag == "Player")
         {
             if (_player != null)
             {
                 _player.Damage();
             }
+            
             _animator.SetTrigger("OnEnemyDeath");
             _speed = 0;
             _explosionSound.Play();
             Destroy(gameObject, 2.8f);
         }
+    }
+
+    IEnumerator EnableBox(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        GetComponent<BoxCollider2D>().enabled = true;
     }
 }
